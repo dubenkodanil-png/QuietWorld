@@ -2,7 +2,7 @@ name: Publish QuietWorld update
 on:
   push:
     branches: [main]
-    paths: [QuietWorld_Source_5.8.0.zip, release.json]
+    paths: [QuietWorld_Source_5.9.0.zip, release.json]
   workflow_dispatch:
 permissions:
   contents: write
@@ -19,8 +19,8 @@ jobs:
       - name: Import initial verified source archive
         run: |
           if [ ! -f go.mod ]; then
-            echo '826e1fef550bb4759c54c3e8d27305a2e53d0a50930730d1e00045bf804aa4ba  QuietWorld_Source_5.8.0.zip' | sha256sum -c -
-            unzip -q QuietWorld_Source_5.8.0.zip
+            echo '884c60dab2cb5ae9ed45212e20930ff469511ed02ee5385e13fe343ef1aa9848  QuietWorld_Source_5.9.0.zip' | sha256sum -c -
+            unzip -q QuietWorld_Source_5.9.0.zip
           fi
       - uses: actions/setup-go@v5
         with:
