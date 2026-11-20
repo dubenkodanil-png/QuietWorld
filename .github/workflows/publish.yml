@@ -1,0 +1,38 @@
+name: Publish QuietWorld update
+on:
+  push:
+    branches: [main]
+    paths: [QuietWorld_Source_5.7.0.zip, release.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: quietworld-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Import initial source archive
+        run: |
+          if [ ! -f go.mod ]; then
+            echo '0381d7cb8d9d8e3308ca6e29934a6a22c3112762c96a6bc71835a018ecca7a52  QuietWorld_Source_5.7.0.zip' | sha256sum -c -
+            unzip -q QuietWorld_Source_5.7.0.zip
+          fi
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Build and test
+        run: python3 scripts/publish.py
+      - name: Publish verified files
+        run: |
+          git add .gitignore go.mod release.json game/ scripts/ setup/main.go updates/
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Publish QuietWorld update'
+          git push origin HEAD:main
