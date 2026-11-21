@@ -57,11 +57,11 @@ func TestSource(t *testing.T) {
 		t.Fatal(r.Code, r.Body.String())
 	}
 	updates := filepath.Join(root, "Updates")
-	b := fixture(t, "6.3.1")
-	os.WriteFile(filepath.Join(updates, "QuietWorld_6.3.1.qwupdate"), b, 0600)
-	os.WriteFile(filepath.Join(updates, "QuietWorld_6.4.0.qwupdate"), []byte("bad"), 0600)
+	b := fixture(t, "6.4.1")
+	os.WriteFile(filepath.Join(updates, "QuietWorld_6.4.1.qwupdate"), b, 0600)
+	os.WriteFile(filepath.Join(updates, "QuietWorld_6.5.0.qwupdate"), []byte("bad"), 0600)
 	r := do("POST", "/update/check", "", true)
-	if r.Code != 200 || !bytes.Contains(r.Body.Bytes(), []byte(`"version":"6.3.1"`)) {
+	if r.Code != 200 || !bytes.Contains(r.Body.Bytes(), []byte(`"version":"6.4.1"`)) {
 		t.Fatal(r.Code, r.Body.String())
 	}
 	r = do("POST", "/update/candidate", "", true)
@@ -83,7 +83,7 @@ func TestSource(t *testing.T) {
 	if r = do("POST", "/update/source", `{"url":""}`, true); r.Code != 200 {
 		t.Fatal(r.Code)
 	}
-	os.Remove(filepath.Join(updates, "QuietWorld_6.3.1.qwupdate"))
+	os.Remove(filepath.Join(updates, "QuietWorld_6.4.1.qwupdate"))
 	if r = do("POST", "/update/check", "", true); r.Code != 502 {
 		t.Fatal(r.Code)
 	}

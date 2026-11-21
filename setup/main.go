@@ -95,7 +95,7 @@ func main() {
 	script := `$ErrorActionPreference='Stop'; $w=New-Object -ComObject WScript.Shell; foreach($p in @([Environment]::GetFolderPath('Desktop'),[Environment]::GetFolderPath('Programs'))){if($p){$l=$w.CreateShortcut((Join-Path $p 'Тихий мир.lnk'));$l.TargetPath=` + q(exe) + `;$l.WorkingDirectory=` + q(dir) + `;$l.Description='Автономная симуляция мира';$l.Save()}}`
 	shortcutErr := ps(script)
 	regOK := true
-	for n, v := range map[string]string{"DisplayName": "Тихий мир / QuietWorld", "DisplayVersion": "6.3.0", "Publisher": "QuietWorld", "InstallLocation": dir, "DisplayIcon": exe, "UninstallString": fmt.Sprintf(`"%s" --uninstall`, un)} {
+	for n, v := range map[string]string{"DisplayName": "Тихий мир / QuietWorld", "DisplayVersion": "6.4.0", "Publisher": "QuietWorld", "InstallLocation": dir, "DisplayIcon": exe, "UninstallString": fmt.Sprintf(`"%s" --uninstall`, un)} {
 		if hidden("reg.exe", "add", key, "/v", n, "/t", "REG_SZ", "/d", v, "/f") != nil {
 			regOK = false
 		}
