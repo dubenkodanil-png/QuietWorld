@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const appVersion = "6.2.0"
+const appVersion = "6.3.0"
 const maxUpdate = 64 << 20
 
 var pendingUpdate atomic.Bool
