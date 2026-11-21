@@ -100,7 +100,7 @@ func main() {
 				Tick    int   `json:"tick"`
 				SavedAt int64 `json:"savedAt"`
 			}
-			if json.Unmarshal(b, &meta) != nil || (meta.Version != 1 && meta.Version != 2 && meta.Version != 3 && meta.Version != 4 && meta.Version != 5 && meta.Version != 6 && meta.Version != 7 && meta.Version != 8 && meta.Version != 9 && meta.Version != 10 && meta.Version != 11 && meta.Version != 12 && meta.Version != 13 && meta.Version != 14) || meta.Tick < 0 {
+			if json.Unmarshal(b, &meta) != nil || (meta.Version != 1 && meta.Version != 2 && meta.Version != 3 && meta.Version != 4 && meta.Version != 5 && meta.Version != 6 && meta.Version != 7 && meta.Version != 8 && meta.Version != 9 && meta.Version != 10 && meta.Version != 11 && meta.Version != 12 && meta.Version != 13 && meta.Version != 14 && meta.Version != 15) || meta.Tick < 0 {
 				http.Error(w, "invalid world", 400)
 				return
 			}

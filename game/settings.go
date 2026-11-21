@@ -52,7 +52,7 @@ type slotRecord struct {
 
 func readMeta(b []byte) (slotMeta, bool) {
 	var m slotMeta
-	if json.Unmarshal(b, &m) != nil || m.Version < 1 || m.Version > 14 || m.Tick < 0 || m.SavedAt < 0 {
+	if json.Unmarshal(b, &m) != nil || m.Version < 1 || m.Version > 15 || m.Tick < 0 || m.SavedAt < 0 {
 		return m, false
 	}
 	return m, true
