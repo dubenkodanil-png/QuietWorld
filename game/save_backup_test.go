@@ -11,7 +11,7 @@ import (
 func TestBackup(t *testing.T) {
 	p := filepath.Join(t.TempDir(), "world.json")
 	mk := func(tick int) []byte {
-		b, _ := json.Marshal(map[string]any{"version": 11, "tick": tick, "width": 24, "height": 16, "tiles": make([]int, 384), "towns": []int{}, "factions": []int{1}})
+		b, _ := json.Marshal(map[string]any{"version": 12, "tick": tick, "width": 24, "height": 16, "tiles": make([]int, 384), "towns": []int{}, "factions": []int{1}})
 		return b
 	}
 	a, b := mk(1), mk(2)
