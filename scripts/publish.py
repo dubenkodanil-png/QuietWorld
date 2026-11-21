@@ -22,6 +22,18 @@ if latest.exists() and not (len(sys.argv)>1 and sys.argv[1]=='--verify-build'):
 verify=len(sys.argv)>1 and sys.argv[1]=='--verify-build'
 if verify:
     folder=Path('build-check'); folder.mkdir(exist_ok=True); latest=folder/'latest.json'
+history_file=Path('game/changelog.json')
+history=json.loads(history_file.read_text(encoding='utf-8'))
+assert isinstance(history,list) and all(isinstance(r,dict) and isinstance(r.get('notes'),list) and r['notes'] and all(isinstance(n,str) for n in r['notes']) for r in history), 'Invalid changelog'
+assert len({r['version'] for r in history})==len(history), 'Duplicate changelog versions'
+assert all(parts(r['version'])<=parts(version) for r in history), 'Changelog contains a future version'
+current=next((r for r in history if r['version']==version),None)
+if current is None:
+    history.append(dict(version=version,notes=notes))
+elif current['notes']!=notes:
+    raise ValueError('Current changelog notes do not match release.json')
+history.sort(key=lambda r:parts(r['version']),reverse=True)
+history_file.write_text(json.dumps(history,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 env=dict(os.environ, GOOS='windows', GOARCH='amd64', CGO_ENABLED='0')
 subprocess.run(['go','build','-trimpath','-ldflags=-s -w -H=windowsgui','-o','setup/QuietWorld.exe','./game'],env=env,check=True)
 subprocess.run(['go','test','./game'],check=True)

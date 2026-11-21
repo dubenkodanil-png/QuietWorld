@@ -17,10 +17,9 @@ import (
 )
 
 var currentNotes = []string{
-	"Исторические эпохи по реальным достижениям цивилизаций; отдельная хроника с причинными ссылками.",
-	"Глобальные засухи и похолодания влияют на урожайность, вызывая голод, помощь и восстановление.",
-	"Отделение нестабильных городов с передачей населения, казны и власти; падение и восстановление государств.",
-	"Исторические вехи экономики, магии, экспедиций и мореплавания; миграция сохранений V6.4.0.",
+	"История всех версий с V1.0.0 в окне «Что нового».",
+	"Поиск по версии и содержанию, архив доступен без интернета.",
+	"Автоматическое добавление новых записей при сборке.",
 }
 
 type remoteRelease struct {
@@ -195,7 +194,12 @@ func registerUpdateSource(mux *http.ServeMux, origin, saveDir string) {
 	}
 	mux.HandleFunc("/update/source", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			reply(w, map[string]any{"url": readConfig().URL, "folder": dir, "version": appVersion, "notes": currentNotes})
+			changelog, err := assets.ReadFile("changelog.json")
+			if err != nil || !json.Valid(changelog) {
+				http.Error(w, "История обновлений недоступна", 500)
+				return
+			}
+			reply(w, map[string]any{"url": readConfig().URL, "folder": dir, "version": appVersion, "notes": currentNotes, "history": json.RawMessage(changelog)})
 			return
 		}
 		if !post(r) {

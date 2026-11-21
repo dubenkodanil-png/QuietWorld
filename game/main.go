@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-//go:embed index.html adventures.js
+//go:embed index.html adventures.js changelog.json
 var assets embed.FS
 var lock sync.Mutex
 
